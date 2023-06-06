@@ -55,7 +55,10 @@ export default function MainTicket({ spotData, currentStepSetter }) {
               <CardContent className={styles.formWrapper}>
                 <TicketsSection />
                 <AvailableSpotsSection areaData={spotData} />
-                <OtherOptionsSection open={open} handleInfoClick={handleInfoClick} />
+                <OtherOptionsSection
+                  open={open}
+                  handleInfoClick={handleInfoClick}
+                />
               </CardContent>
               <div className={styles.btn_container}>
                 <MyButton type="submit">Next</MyButton>
