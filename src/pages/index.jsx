@@ -20,7 +20,7 @@ export async function getServerSideProps() {
   const apiEndpoint = "https://nova-enchanted-confidence.glitch.me/bands";
   const bandRes = await fetch(apiEndpoint);
   const bandData = await bandRes.json();
-
+  //code commit
   return {
     props: {
       bandData,
