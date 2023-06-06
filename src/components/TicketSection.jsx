@@ -7,25 +7,42 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
+import { getTodayDate } from "@mui/x-date-pickers/internals";
 // import { startOfDay } from "date-fns";
 export default function TicketsSection() {
   //context call for the child component
   const { formData, dispatch } = useContext(formDataContext);
-  const minDate = new Date("2023-06-05");
-  // const maxDate = new const today = dayjs();
-  const today = dayjs();
+
+  //set festival possible date range here
+  const minDate = new Date("2023-07-10"); //format must be YYYY-MM-DD
+  const maxDate = new Date("2023-07-24");
+  //prefilled default value set to 'today's date'
+  const startofFestival = dayjs("2023-07-10");
+  const isOutofRange = (date) => {
+    //this checks if the dates returned by dayjs are not inbetween given range (min and maxDate  (to incl the maxDate))
+    return !dayjs(date).isBetween(minDate, maxDate, null, "[]"); // Disable dates outside the range
+  };
+  // const startOutOfRange = dayjs().startOf(minDate);
+
+  // const lastMonday = dayjs().startOf("week");
   return (
     <>
       <h2 className={styles.h2}>Tickets</h2>
       <div className="datePickerContainer" style={styles.inputContainer}>
         {/* <TextField label="Choose a date"></TextField> */}
+        {/* FROM MUI DOCS about DATEPICKER component and validation*/}
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
-            label="Controlled picker"
+            label="Choose a date between 10th July 2023 and 24th July 2023"
             value={formData.date}
-            defaultValue={today}
-            views={["year", "month", "day"]}
+            defaultValue={startofFestival}
+            // maxDate={maxDate}
+
+            shouldDisableDate={isOutofRange} //shouldDisableDate bool
+            views={["year", "month", "day"]} //which calendar views is available also how the calendar UI is.
+            //register change in field and dispatch to the conText
             onChange={(e) => {
+              //split the string on the time format
               const formattedDate = e.toISOString().split("T")[0];
               dispatch({
                 //dispatch to the global formData obj. with new state value
@@ -33,6 +50,7 @@ export default function TicketsSection() {
                 payload: { field: "date", value: formattedDate },
               });
             }}
+            helperText="Choose a date between 10th July 2023 and 24th July 2023"
             renderInput={(params) => (
               <TextField {...params} value={formData.date} />
             )}
@@ -107,37 +125,4 @@ export default function TicketsSection() {
       />
     </>
   );
-}
-{
-  /* <TextField
-        className={styles.inputField}
-        type="date"
-        helperText="Choose a date"
-        value={formData.date}
-        required
-        onChange={(e) =>
-          dispatch({
-            //dispatch to the global formData obj. with new state value
-            action: "UPDATE_FIELD",
-            payload: { field: "date", value: e.target.value },
-          })
-        }
-     
-      /> */
-}
-{
-  /* <DatePicker
-        label="Select Date"
-        value={formData.date}
-        onChange={(e) =>
-          dispatch({
-            //dispatch to the global formData obj. with new state value
-            action: "UPDATE_FIELD",
-            payload: { field: "date", value: e.target.value },
-          })
-        }
-        renderInput={(params) => <TextField {...params} />}
-        minDate={minDate}
-        maxDate={maxDate}
-      > */
 }
