@@ -200,7 +200,13 @@ export default function OtherOptionsSection({ open, handleInfoClick }) {
             </div>
           )}
         </div>
-        <p className={styles.p}>Total price: {formData.formData.ticketPrice}</p>
+        <p className={styles.p}>
+          Total price:{" "}
+          {/* check for if the price is 'not a number', then display 0, otherwise display current "total" ticketprice  */}
+          {Number.isNaN(formData.formData.ticketPrice)
+            ? 0
+            : formData.formData.ticketPrice}
+        </p>
       </FormGroup>
     </>
   );

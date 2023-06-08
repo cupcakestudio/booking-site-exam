@@ -115,6 +115,13 @@ function reducer(state, action) {
           tent: isTentChecked,
         },
       };
+    case "RESET_TICKET_PRICE":
+      return {
+        ...state,
+        formData: {
+          ticketPrice: 0,
+        },
+      };
     case "UPDATE_TICKET_PRICE":
       let updatedTicketPriceWithTent = 0;
 
