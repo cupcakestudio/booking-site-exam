@@ -14,8 +14,11 @@ export default function PersonalInfo({ currentStepSetter, timerValue }) {
   const [tents3Counter, setTents3Counter] = useState(0);
 
   function handlePreviousFormComponent() {
+    dispatch({
+      action: "RESET_TICKET_PRICE",
+    });
     dispatch({ action: "PREVIOUS" });
-    /* dispatch({ action: "CREATE_ATTENDEE_STRUCTURE" }) */
+
     currentStepSetter(0); //change current step
 
     /* Resetter counteren på telte, her sættes counteren til 0 */
