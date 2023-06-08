@@ -95,7 +95,10 @@ button:hover {
   font-size: var(--p-footer);
   font-weight: bold;
 }
-
+/*styling af calender mui button in datepicker component*/
+.MuiIconButton-edgeEnd, .MuiIconButton-edgeStart  {
+width: fit-content;
+}
 @media (max-width: 750px) {
   .footerContainer,
   .footerInfoBox {

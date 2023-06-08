@@ -7,7 +7,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
-import { getTodayDate } from "@mui/x-date-pickers/internals";
+
 // import { startOfDay } from "date-fns";
 export default function TicketsSection() {
   //context call for the child component
@@ -33,16 +33,18 @@ export default function TicketsSection() {
         {/* FROM MUI DOCS about DATEPICKER component and validation*/}
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
-            label="Choose a date between 10th July 2023 and 24th July 2023"
+            className={` ${styles.MuiIconButtonRoot}`}
+            required
+            label="Choose a date "
             value={formData.date}
             defaultValue={startofFestival}
             // maxDate={maxDate}
 
             shouldDisableDate={isOutofRange} //shouldDisableDate bool
-            views={["year", "month", "day"]} //which calendar views is available also how the calendar UI is.
+            views={["day"]} //which calendar views is available also how the calendar UI is.
             //register change in field and dispatch to the conText
             onChange={(e) => {
-              //split the string on the time format
+              //split the string on the time format: 2022-01-01T00:00:00.000
               const formattedDate = e.toISOString().split("T")[0];
               dispatch({
                 //dispatch to the global formData obj. with new state value
