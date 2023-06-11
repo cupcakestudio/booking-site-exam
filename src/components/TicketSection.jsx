@@ -7,59 +7,46 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
-//import { daDK } from "@mui/x-date-pickers/locales";
 import "dayjs/locale/da";
 import utc from "dayjs/plugin/utc";
+dayjs.extend(utc); //dayjs extends with utc functionality package
 
 export default function TicketsSection() {
   //context call for the child component
   const { formData, dispatch } = useContext(formDataContext);
 
   //set festival possible date range here
-  const minDate = new Date("2023-07-09"); //format must be YYYY-MM-DD
-  const maxDate = new Date("2023-07-24");
-  // const minDate = dayjs("2023-07-10"); //format must be YYYY-MM-DD
-  // const maxDate = dayjs("2023-07-24");
-  //prefilled default value set to 'start of festival's date'
+
+  const minDate = dayjs("2023-07-10").utc().startOf("day"); //account for timezome with utc() and begiining / end of day;
+
+  const maxDate = dayjs("2023-07-24").utc().endOf("day");
 
   const isOutofRange = (date) => {
     //this checks if the dates returned by dayjs are not inbetween given range (min and maxDate  (to incl the maxDate))
-    return !dayjs(date).isBetween(minDate, maxDate, null, "[]"); // Disable dates outside the range
+    return (
+      !dayjs(date).isBetween(minDate, maxDate, null, "[]") &&
+      !dayjs(date).isSame(maxDate, "day")
+    ); // Disable dates outside the range, only exclude the maxDate if it is not selected as choosen date
   };
-  // const startOutOfRange = dayjs().startOf(minDate);
 
-  // const lastMonday = dayjs().startOf("week");
-
-  dayjs.extend(utc);
   return (
     <>
       <h2 className={styles.h2}>Tickets</h2>
       <div className="datePickerContainer" style={styles.inputContainer}>
-        {/* <TextField label="Choose a date"></TextField> */}
         {/* FROM MUI DOCS about DATEPICKER component and validation*/}
-        <LocalizationProvider
-          dateAdapter={AdapterDayjs}
-          // localeText={
-          //   daDK.components.MuiLocalizationProvider.defaultProps.localeText
-          // }
-          adapterLocale="da"
-          dateLibInstance={dayjs.utc}
-        >
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="da">
           <DatePicker
             className={` ${styles.inputField}`}
             required
-            label="Choose a date between 10th July 2023 and 24th July 2023"
+            label="Choose a date"
             value={formData.date}
-            defaultValue={startofFestival}
+            defaultValue={dayjs("2023-07-10")} //write in format: YYYY-MM-DD
             shouldDisableDate={isOutofRange} //shouldDisableDate bool
-            views={["day"]} //which calendar views is available also how the calendar UI is.
+            views={["day"]}
             //register change in field and dispatch to the context
             onChange={(e) => {
-              //split the string on the time format: 2022-01-01T00:00:00.000
-              const formattedDate =
-                // e
-                //   .toLocaleString("da-DK")
-                e.toISOString();
+              //split the string on the time format: weekday, date, month, time 20:00:00
+              const formattedDate = e.toLocaleString("daDK").split("20")[0]; //split to excl. time
               dispatch({
                 //dispatch to the global formData obj. with new state value
                 action: "UPDATE_FIELD",
@@ -73,27 +60,6 @@ export default function TicketsSection() {
           />
         </LocalizationProvider>
       </div>
-      {/* <DatePicker
-        label="Choose a date"
-        value={formData.date}
-        onChange={(e) =>
-          dispatch({
-            //dispatch to the global formData obj. with new state value
-            action: "UPDATE_FIELD",
-            payload: { field: "date", value: e.target.value },
-          })
-        }
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            className={styles.inputField}
-            helperText="Choose a date"
-            required
-          />
-        )}
-        minDate={minDate}
-        maxDate={maxDate}
-      /> */}
 
       <InputLabel
         id="dropdown-label"
