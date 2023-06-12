@@ -127,8 +127,8 @@ function reducer(state, action) {
 
       if (state.formData.tent) {
         // Define the cost of each tent (adjust according to your requirements)
-        const tent2Cost = 10;
-        const tent3Cost = 20;
+        const tent2Cost = 299;
+        const tent3Cost = 399;
 
         // Calculate the updated ticket price based on tent costs
         updatedTicketPriceWithTent =
@@ -136,13 +136,21 @@ function reducer(state, action) {
           state.formData.tents2 * tent2Cost +
           state.formData.tents3 * tent3Cost;
       } else {
-        updatedTicketPriceWithTent = ticketPrice;
+        updatedTicketPriceWithTent = calculateTicketPrice(
+          state.formData.ticketType,
+          state.formData.ticketAmount,
+          state.formData.green,
+          false,
+          state.formData.tents2,
+          state.formData.tents3
+        );
       }
 
       return {
         ...state,
         formData: {
           ...state.formData,
+          tent: false,
           ticketPrice: updatedTicketPriceWithTent,
         },
       };
@@ -185,84 +193,82 @@ function reducer(state, action) {
           ticketPrice: updatedPriceWithTent3,
         },
       };
-
-    case "UPDATE_ATTENDEE_FIELD":
-      return {
-        ...state,
-        formData: {
-          ...state.formData,
-          //map through the existing atteendees[]
-
-          attendees: state.formData.attendees.map((attendee, index) => {
-            if (index === action.payload.index) {
-              //and make sure each value is on the correct attendee index
-              return {
-                ...attendee,
-                [action.payload.field]: action.payload.value,
-              };
-            }
-            return attendee;
-          }),
-        },
-      };
-    case "CREATE_ATTENDEE_STRUCTURE":
-      let attendees = [];
-      //run through ticketAmount to get correct personal Info tabs loaded
-      for (let i = 0; i < state.formData.ticketAmount; i++) {
-        attendees.push({ fullname: "", email: "", phone: "" });
-      }
-      return {
-        ...state,
-        formData: {
-          ...state.formData,
-          attendees: attendees,
-        },
-      };
-
-    case "ADD_ATTENDEE":
-      return {
-        ...state,
-        formData: {
-          ...state.formData,
-          attendees: [
-            ...state.formData.attendees,
-            { fullname: "", email: "", phone: "" },
-          ],
-        },
-      };
-
-    case "NEXT":
-      return {
-        ...state,
-
-        formData: {
-          ...state.formData,
-          ...action.payload,
-        },
-      };
-    /* tilbage */
-    case "PREVIOUS":
-      return {
-        ...state,
-
-        formData: {
-          ...state.formData,
-          ...action.payload,
-        },
-      };
-
-    case "SUBMIT":
-      return {
-        ...state,
-        formData: {
-          ...state.formData,
-        },
-      };
-    default:
-      return state;
   }
 }
+// case "UPDATE_ATTENDEE_FIELD":
+//   return {
+//     ...state,
+//     formData: {
+//       ...state.formData,
+//       //map through the existing atteendees[]
 
+//       attendees: state.formData.attendees.map((attendee, index) => {
+//         if (index === action.payload.index) {
+//           //and make sure each value is on the correct attendee index
+//           return {
+//             ...attendee,
+//             [action.payload.field]: action.payload.value,
+//           };
+//         }
+//         return attendee;
+//       }),
+//     },
+//   };
+// case "CREATE_ATTENDEE_STRUCTURE":
+//   let attendees = [];
+//   //run through ticketAmount to get correct personal Info tabs loaded
+//   for (let i = 0; i < state.formData.ticketAmount; i++) {
+//     attendees.push({ fullname: "", email: "", phone: "" });
+//   }
+//   return {
+//     ...state,
+//     formData: {
+//       ...state.formData,
+//       attendees: attendees,
+//     },
+//   };
+
+// case "ADD_ATTENDEE":
+//   return {
+//     ...state,
+//     formData: {
+//       ...state.formData,
+//       attendees: [
+//         ...state.formData.attendees,
+//         { fullname: "", email: "", phone: "" },
+//       ],
+//     },
+//   };
+
+// case "NEXT":
+//   return {
+//     ...state,
+
+//     formData: {
+//       ...state.formData,
+//       ...action.payload,
+//     },
+//   };
+// /* tilbage */
+// case "PREVIOUS":
+//   return {
+//     ...state,
+
+//     formData: {
+//       ...state.formData,
+//       ...action.payload,
+//     },
+//   };
+
+// case "SUBMIT":
+//   return {
+//     ...state,
+//     formData: {
+//       ...state.formData,
+//     },
+//   };
+// default:
+//   return state;
 function calculateTicketPrice(
   ticketType,
   ticketAmount,
@@ -280,13 +286,13 @@ function calculateTicketPrice(
   }
 
   let totalPrice = basePrice * ticketAmount;
+
+  if (isTentChecked && tents2Amount >= 0 && tents3Amount >= 0) {
+    totalPrice += tents2Amount * 299 + tents3Amount * 399;
+  }
   //if checkboxes is ticked
   if (isGreenChecked) {
     totalPrice += 249;
-  }
-
-  if (isTentChecked) {
-    totalPrice += tents2Amount * 299 + tents3Amount * 399;
   }
   return totalPrice;
 }

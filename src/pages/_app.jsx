@@ -9,6 +9,8 @@ export default function MyApp({ Component, pageProps }) {
   // Checker om current page er BookingDisplay, bruges til at fjerne navigation
   const isBookingDisplayPage = Component === BookingDisplay;
 
+  //lytter og render kun efter ´pageProps´ ændringer, også tildeler den rigtige farve
+
   useEffect(() => {
     // destructurere pageProps, så det kun er pagePropsne defineret inde i const
     const { isLanding, isSchedule, isProgram } = pageProps;
