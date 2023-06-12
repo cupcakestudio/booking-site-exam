@@ -88,7 +88,7 @@ const columns = [
     align: "right",
   },
 ];
-
+//MUI component, med build-in createData()
 function createData(
   time00,
   time02,
@@ -120,6 +120,7 @@ function createData(
 }
 
 export default function StickyHeadTable({ schedule }) {
+  //pga. MUI component
   const rows = {
     Monday: [
       createData(...days("mon", "Midgard")),
