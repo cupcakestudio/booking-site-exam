@@ -34,7 +34,11 @@ export default function TicketsSection() {
       <h2 className={styles.h2}>Tickets</h2>
       <div className="datePickerContainer" style={styles.inputContainer}>
         {/* FROM MUI DOCS about DATEPICKER component and validation*/}
-        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="da">
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          adapterLocale="da"
+          dateLibInstance={dayjs.utc}
+        >
           <DatePicker
             className={` ${styles.inputField}`}
             required
