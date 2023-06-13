@@ -36,7 +36,7 @@ export default function MainTicket({ spotData, currentStepSetter }) {
         formData.formData.id = data.id;
         handleNextFormComponent();
       });
-    console.log(formData, formData.id);
+    // console.log(formData, formData.id);
   }
 
   function handleNextFormComponent() {
