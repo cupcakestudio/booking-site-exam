@@ -18,7 +18,7 @@ export default function Home({ bandData }) {
     </section>
   );
 }
-
+//code test
 export async function getServerSideProps() {
   const apiEndpoint = "https://nova-enchanted-confidence.glitch.me/bands";
   const bandRes = await fetch(apiEndpoint);
