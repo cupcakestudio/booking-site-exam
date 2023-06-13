@@ -201,11 +201,11 @@ export default function OtherOptionsSection({ open, handleInfoClick }) {
           )}
         </div>
         <p className={styles.p}>
-          Total price:{" "}
+          Total price:{"22222"}
           {/* check for if the price is 'not a number', then display 0, otherwise display current "total" ticketprice  */}
-          {Number.isNaN(formData.formData.ticketPrice)
+          {/* {Number.isNaN(formData.formData.ticketPrice)
             ? 0
-            : formData.formData.ticketPrice}
+            : formData.formData.ticketPrice} */}
         </p>
       </FormGroup>
     </>
