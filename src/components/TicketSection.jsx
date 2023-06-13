@@ -17,14 +17,15 @@ export default function TicketsSection() {
 
   //set festival possible date range here
 
-  const minDate = dayjs("2023-07-10").utc().startOf("day"); //account for timezome with utc() and begiining / end of day;
+  const minDate = dayjs("2023-07-10").utc("Europe/Amsterdam").startOf("day"); //account for timezome with utc() and begiining / end of day;
 
-  const maxDate = dayjs("2023-07-24").utc().endOf("day");
+  const maxDate = dayjs("2023-07-24").utc("Europe/Amsterdam").endOf("day");
 
   const isOutofRange = (date) => {
     //this checks if the dates returned by dayjs are not inbetween given range (min and maxDate  (to incl the maxDate))
     return (
       !dayjs(date).isBetween(minDate, maxDate, null, "[]") &&
+      !dayjs(date).isSame(minDate, "day") &&
       !dayjs(date).isSame(maxDate, "day")
     ); // Disable dates outside the range, only exclude the maxDate if it is not selected as choosen date
   };
@@ -37,20 +38,20 @@ export default function TicketsSection() {
         <LocalizationProvider
           dateAdapter={AdapterDayjs}
           adapterLocale="da"
-          dateLibInstance={dayjs.utc}
+          // dateLibInstance={dayjs.utc}
         >
           <DatePicker
             className={` ${styles.inputField}`}
             required
             label="Choose a date"
             value={formData.date}
-            defaultValue={dayjs("2023-07-10")} //write in format: YYYY-MM-DD
+            defaultValue={dayjs("2023-07-10").utc("Europe/Amsterdam")} //write in format: YYYY-MM-DD
             shouldDisableDate={isOutofRange} //shouldDisableDate bool
             views={["day"]}
             //register change in field and dispatch to the context
             onChange={(e) => {
               //split the string on the time format: weekday, date, month, time 20:00:00
-              const formattedDate = e.toLocaleString("daDK").split("20")[0]; //split to excl. time
+              const formattedDate = e.toLocaleString("daDK").split("00")[0]; //split to excl. time
               dispatch({
                 //dispatch to the global formData obj. with new state value
                 action: "UPDATE_FIELD",
