@@ -62,8 +62,6 @@ export default function FormPay({ currentStepSetter }) {
     currentStepSetter(3);
   }
   console.log(formData);
-  /* samled pris af bestilling state */
-  const [totalAmount, setTotalAmount] = useState(0);
 
   function handlePreviousFormComponent() {
     dispatch({ action: "PREVIOUS" });
@@ -114,8 +112,12 @@ export default function FormPay({ currentStepSetter }) {
               Spots /{" "}
               <span className={styles.bold}>{formData.formData.area}</span>
             </p>
-            <p className={styles.p}>
-              {formData.formData.green ? <p>Green Option</p> : <p></p>}
+            <p>
+              {formData.formData.green ? (
+                <p className={styles.p}>Green Option</p>
+              ) : (
+                <p></p>
+              )}
             </p>
             <p>
               {formData.formData.tent ? (
@@ -124,6 +126,7 @@ export default function FormPay({ currentStepSetter }) {
                 <p></p>
               )}
             </p>
+            <p>Total Sum: {formData.formData.ticketPrice} DKK</p>
           </div>
           <div className={styles.atendee_container}>
             {formData.formData.attendees.map((attending, index) => (
