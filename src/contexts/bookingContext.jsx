@@ -83,34 +83,86 @@ function reducer(state, action) {
       return {};
 
     //Incase of green option
+    // case "GREEN":
+    //   //here extract the prop from payload
+    //   const { isChecked } = action.payload;
+    //   //modify payload based on choice and then insert into global state, chatgpt helped
+    //   const updatedticketwithGreen = calculateTicketPrice(
+    //     state.formData.ticketType,
+    //     state.formData.ticketAmount,
+    //     isChecked,
+    //     state.formData.tent,
+    //     action.payload.tents2Amount,
+    //     action.payload.tents3Amount
+    //   );
+    //   return {
+    //     ...state,
+    //     formData: {
+    //       ...state.formData,
+    //       green: isChecked,
+    //       ticketPrice: updatedticketwithGreen,
+    //     },
+    //   };
+    // //Incase of tent set up
+    // case "TENT_SETUP":
+    //   const { isTentChecked } = action.payload;
+    //   return {
+    //     ...state,
+    //     formData: {
+    //       ...state.formData,
+    //       tent: isTentChecked,
+    //     },
+    //   };
+
     case "GREEN":
-      //here extract the prop from payload
       const { isChecked } = action.payload;
-      //modify payload based on choice and then insert into global state, chatgpt helped
-      const updatedticketwithGreen = calculateTicketPrice(
-        state.formData.ticketType,
-        state.formData.ticketAmount,
+      //create seperate object (a copy) to make sure that state is correctly updated
+      // before calculating ticketPrice
+      const updatedFormDataWithGreen = {
+        ...state.formData,
+        green: isChecked,
+      };
+
+      const updatedTicketPriceWithGreen = calculateTicketPrice(
+        updatedFormDataWithGreen.ticketType,
+        updatedFormDataWithGreen.ticketAmount,
         isChecked,
-        state.formData.tent,
-        action.payload.tents2Amount,
-        action.payload.tents3Amount
+        updatedFormDataWithGreen.tent,
+        updatedFormDataWithGreen.tents2,
+        updatedFormDataWithGreen.tents3
       );
+
       return {
         ...state,
         formData: {
-          ...state.formData,
-          green: isChecked,
-          ticketPrice: updatedticketwithGreen,
+          ...updatedFormDataWithGreen,
+          ticketPrice: updatedTicketPriceWithGreen,
         },
       };
-    //Incase of tent set up
+
     case "TENT_SETUP":
       const { isTentChecked } = action.payload;
+      //create seperate object (a copy) to make sure that state is correctly updated
+      // before calculating ticketPrice
+      const updatedFormDataWithTent = {
+        ...state.formData,
+        tent: isTentChecked,
+      };
+
+      const updatedTicketPriceWithTent = calculateTicketPrice(
+        updatedFormDataWithTent.ticketType,
+        updatedFormDataWithTent.ticketAmount,
+        updatedFormDataWithTent.green,
+        isTentChecked,
+        updatedFormDataWithTent.tents2,
+        updatedFormDataWithTent.tents3
+      );
+
       return {
         ...state,
         formData: {
-          ...state.formData,
-          tent: isTentChecked,
+          ...updatedFormDataWithTent,
+          ticketPrice: updatedTicketPriceWithTent,
         },
       };
     case "RESET_TICKET_PRICE":
@@ -120,21 +172,22 @@ function reducer(state, action) {
           ticketPrice: 0,
         },
       };
+
     case "UPDATE_TICKET_PRICE":
-      let updatedTicketPriceWithTent = 0;
+      let updatedTicketPrice = 0;
 
       if (state.formData.tent) {
         // Define the cost of each tent (adjust according to your requirements)
-        const tent2Cost = 10;
-        const tent3Cost = 20;
+        const tent2Cost = 299;
+        const tent3Cost = 399;
 
         // Calculate the updated ticket price based on tent costs
-        updatedTicketPriceWithTent =
+        updatedTicketPrice =
           state.formData.ticketPrice +
           state.formData.tents2 * tent2Cost +
           state.formData.tents3 * tent3Cost;
       } else {
-        updatedTicketPriceWithTent = ticketPrice;
+        updatedTicketPrice = ticketPrice;
       }
 
       return {
@@ -183,7 +236,6 @@ function reducer(state, action) {
           ticketPrice: updatedPriceWithTent3,
         },
       };
-
     case "UPDATE_ATTENDEE_FIELD":
       return {
         ...state,
