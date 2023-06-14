@@ -118,7 +118,7 @@ export default function FormPay({ currentStepSetter }) {
               {formData.formData.green ? <p>Green Option</p> : <p></p>}
             </p>
             <p>
-              {formData.formData.tentSetUp ? (
+              {formData.formData.tent ? (
                 <p className={styles.p}>Setup of tent</p>
               ) : (
                 <p></p>
