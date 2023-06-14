@@ -126,7 +126,11 @@ export default function FormPay({ currentStepSetter }) {
                 <p></p>
               )}
             </p>
-            <p>Total Sum: {formData.formData.ticketPrice} DKK</p>
+            <p>
+              Total Sum:{" "}
+              <span className={styles.p}>{formData.formData.ticketPrice}</span>{" "}
+              DKK
+            </p>
           </div>
           <div className={styles.atendee_container}>
             {formData.formData.attendees.map((attending, index) => (
